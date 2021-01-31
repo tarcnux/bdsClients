@@ -7,12 +7,15 @@ import java.util.stream.Collectors;
 import javax.persistence.EntityNotFoundException;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import br.com.tarcnux.bdsClients.dto.ClientDTO;
 import br.com.tarcnux.bdsClients.entities.Client;
 import br.com.tarcnux.bdsClients.repositories.ClientRepository;
+import br.com.tarcnux.bdsClients.services.exceptions.DataBaseException;
 import br.com.tarcnux.bdsClients.services.exceptions.ResourceNotFoundException;
 
 @Service
@@ -71,5 +74,17 @@ public class ClientService {
 		} catch (EntityNotFoundException e) {
 			throw new ResourceNotFoundException(String.format("Id %d not found", id));
 		}
+	}
+
+	public void delete(Long id) {
+		try {
+			clientRepository.deleteById(id);
+		} catch (EmptyResultDataAccessException e) {
+			throw new ResourceNotFoundException(String.format("Id %d not found", id));
+		} catch (DataIntegrityViolationException e) {
+			//Referential integrity violation, in this case is not applicable, but leave it.
+			throw new DataBaseException("Integrity Violation");
+		}
+		
 	}
 }
