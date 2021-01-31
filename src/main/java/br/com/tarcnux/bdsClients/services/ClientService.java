@@ -1,6 +1,7 @@
 package br.com.tarcnux.bdsClients.services;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,13 +11,15 @@ import org.springframework.transaction.annotation.Transactional;
 import br.com.tarcnux.bdsClients.dto.ClientDTO;
 import br.com.tarcnux.bdsClients.entities.Client;
 import br.com.tarcnux.bdsClients.repositories.ClientRepository;
+import br.com.tarcnux.bdsClients.services.exceptions.ResourceNotFoundException;
 
 @Service
 public class ClientService {
 	
 	@Autowired
 	private ClientRepository clientRepository;
-
+	
+	
 	@Transactional(readOnly = true)
 	public List<ClientDTO> findALL() {
 		
@@ -25,5 +28,13 @@ public class ClientService {
 				.map(cli -> new ClientDTO(cli)).collect(Collectors.toList());
 		
 		return listClientDTO;
+	}
+
+	@Transactional(readOnly = true)
+	public ClientDTO findById(Long id) {
+		Optional<Client> optionalObjClient = clientRepository.findById(id);	
+//		Client entityClient = optionalObjClient.get();
+		Client entityClient = optionalObjClient.orElseThrow(() -> new ResourceNotFoundException("Resource not found"));
+		return new ClientDTO(entityClient);
 	}
 }
