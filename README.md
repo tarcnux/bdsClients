@@ -9,7 +9,9 @@ Projeto apresentado ao final do 1º capítulo do BootCamp DevSuperior.
  - Atualizar recurso 
  - Deletar recurso
  
-O usa um ambiente de testes (manual) configurado acessando o **banco de dados H2**, usa **Maven** como gerenciador de dependência, e **Java 11** como linguagem.
+O CRUD usa um ambiente de testes (manual) configurado acessando o **banco de dados H2**, usa **Maven** como gerenciador de dependência, e **Java 11** como linguagem.
+
+[![Run in Postman](https://run.pstmn.io/button.svg)](https://god.postman.co/run-collection/47964252a765c6979f48)
 
 #### Busca paginada de clientes
     GET /clients?page=0&linesPerPage=6&direction=ASC&orderBy=name
