@@ -1,14 +1,14 @@
 package br.com.tarcnux.bdsClients.services;
 
-import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 import javax.persistence.EntityNotFoundException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -26,11 +26,11 @@ public class ClientService {
 	
 	
 	@Transactional(readOnly = true)
-	public List<ClientDTO> findALL() {
+	public Page<ClientDTO> findAllPaged(PageRequest pageRequest) {
 		
-		List<Client> listClient = clientRepository.findAll();
-		List<ClientDTO> listClientDTO = listClient.stream()
-				.map(cli -> new ClientDTO(cli)).collect(Collectors.toList());
+		Page<Client> listClient = clientRepository.findAll(pageRequest);
+		
+		Page<ClientDTO> listClientDTO = listClient.map(cli -> new ClientDTO(cli));
 		
 		return listClientDTO;
 	}
